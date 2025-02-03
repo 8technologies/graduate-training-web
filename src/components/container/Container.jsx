@@ -13,7 +13,7 @@ const Container = ({
   } = settings;
   const widthMode = width ?? container;
   return <div className={clsx(className, widthMode === 'fixed' ? 'container-fixed' : 'container-fluid')}>
-      {children}
-    </div>;
+    {children}
+  </div>;
 };
 export { Container };
