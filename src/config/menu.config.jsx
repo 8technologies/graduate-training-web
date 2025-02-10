@@ -9,9 +9,9 @@ export const MENU_SIDEBAR = [{
     path: '/dark-sidebar'
   }]
 }, {
-  heading: 'User'
+  heading: 'STUDENT'
 }, {
-  title: 'Public Profile',
+  title: 'Student',
   icon: 'profile-circle',
   children: [{
     title: 'Profiles',
