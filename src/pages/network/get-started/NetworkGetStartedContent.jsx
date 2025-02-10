@@ -25,7 +25,7 @@ const NetworkGetStartedContent = () => {
     title: 'User Base',
     description: 'A Broad Perspective on Our Comprehensive Security Features and Policies.',
     sub: [{
-      title: 'Team Crew',
+      title: 'Student',
       path: 'network/user-cards/team-crew'
     }, {
       title: 'App Roster',
@@ -114,7 +114,7 @@ const NetworkGetStartedContent = () => {
     }]
   }];
   return <div className="grid gap-5 lg:gap-7.5">
-      <Options items={items} />
-    </div>;
+    <Options items={items} />
+  </div>;
 };
 export { NetworkGetStartedContent };

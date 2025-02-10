@@ -9,12 +9,12 @@ export const MENU_SIDEBAR = [{
     path: '/dark-sidebar'
   }]
 }, {
-  heading: 'User'
+  heading: 'Admin'
 }, {
-  title: 'Public Profile',
+  title: 'Students Profile',
   icon: 'profile-circle',
   children: [{
-    title: 'Profiles',
+    title: 'Program',
     children: [{
       title: 'Default',
       path: '/public-profile/profiles/default'
@@ -581,7 +581,7 @@ export const MENU_MEGA = [{
     }]
   }]
 }, {
-  title: 'Network',
+  title: 'Student',
   children: [{
     title: 'General Pages',
     children: [{
