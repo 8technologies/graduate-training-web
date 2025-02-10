@@ -7,3 +7,4 @@ export * from './projects';
 export * from './teams/ProfileTeamsPage';
 export * from './works/ProfileWorksPage';
 export * from './PageMenu';
+export * from './supervisorContent';

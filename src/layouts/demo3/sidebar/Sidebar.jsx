@@ -67,27 +67,27 @@ const Sidebar = () => {
   };
   const renderContent = () => {
     return <div className="fixed w-[--tw-sidebar-width] lg:top-[--tw-header-height] top-0 bottom-0 z-20 lg:flex flex-col items-stretch shrink-0 group py-3 lg:py-0">
-        <div className="flex grow shrink-0">
-          <div className="scrollable-y-auto grow gap-2.5 shrink-0 flex items-center flex-col" style={{
+      <div className="flex grow shrink-0">
+        <div className="scrollable-y-auto grow gap-2.5 shrink-0 flex items-center flex-col" style={{
           ...(desktopMode && scrollableHeight > 0 && {
             height: `${scrollableHeight}px`
           })
         }}>
-            {items.map((item, index) => item.path.startsWith('http') ? <a href={item.path} key={index} data-tooltip={item.tooltip} data-tooltip-placement="right" target="_blank" rel="noopener noreferrer" className={`btn btn-icon btn-icon-lg rounded-full size-10 border here:border-gray-300 
+          {items.map((item, index) => item.path.startsWith('http') ? <a href={item.path} key={index} data-tooltip={item.tooltip} data-tooltip-placement="right" target="_blank" rel="noopener noreferrer" className={`btn btn-icon btn-icon-lg rounded-full size-10 border here:border-gray-300 
                     text-gray-600 hover:bg-light hover:text-primary hover:border-gray-300 ${item.active ? 'bg-light text-primary' : ''}`}>
-                  <span className="menu-icon">
-                    <KeenIcon icon={item.icon} />
-                  </span>
-                  <span className="tooltip">{item.tooltip}</span>
-                </a> : <Link to={item.path} key={index} data-tooltip={item.tooltip} data-tooltip-placement="right" className={`btn btn-icon btn-icon-lg rounded-full size-10 border active:border-gray-300 text-gray-600 hover:bg-light hover:text-primary hover:border-gray-300 ${item.active ? 'bg-light text-primary border-gray-300' : ''}`}>
-                  <span className="menu-icon">
-                    <KeenIcon icon={item.icon} />
-                  </span>
-                  <span className="tooltip">{item.tooltip}</span>
-                </Link>)}
-          </div>
+            <span className="menu-icon">
+              <KeenIcon icon={item.icon} />
+            </span>
+            <span className="tooltip">{item.tooltip}</span>
+          </a> : <Link to={item.path} key={index} data-tooltip={item.tooltip} data-tooltip-placement="right" className={`btn btn-icon btn-icon-lg rounded-full size-10 border active:border-gray-300 text-gray-600 hover:bg-light hover:text-primary hover:border-gray-300 ${item.active ? 'bg-light text-primary border-gray-300' : ''}`}>
+            <span className="menu-icon">
+              <KeenIcon icon={item.icon} />
+            </span>
+            <span className="tooltip">{item.tooltip}</span>
+          </Link>)}
         </div>
-      </div>;
+      </div>
+    </div>;
   };
   useEffect(() => {
     if (mobileMode && prevPathname !== pathname) {
@@ -98,14 +98,14 @@ const Sidebar = () => {
     return renderContent();
   } else {
     return <Sheet open={mobileSidebarOpen} onOpenChange={setMobileSidebarOpen}>
-        <SheetContent className="border-0 p-0 w-[--tw-sidebar-width] scrollable-y-auto" forceMount={true} side="left" close={false}>
-          <SheetHeader className="sr-only">
-            <SheetTitle>Mobile Menu</SheetTitle>
-            <SheetDescription></SheetDescription>
-          </SheetHeader>
-          {renderContent()}
-        </SheetContent>
-      </Sheet>;
+      <SheetContent className="border-0 p-0 w-[--tw-sidebar-width] scrollable-y-auto" forceMount={true} side="left" close={false}>
+        <SheetHeader className="sr-only">
+          <SheetTitle>Mobile Menu</SheetTitle>
+          <SheetDescription></SheetDescription>
+        </SheetHeader>
+        {renderContent()}
+      </SheetContent>
+    </Sheet>;
   }
 };
 export { Sidebar };
