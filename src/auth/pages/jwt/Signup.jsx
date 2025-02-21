@@ -7,47 +7,62 @@ import { useAuthContext } from '../../useAuthContext';
 import { toAbsoluteUrl } from '@/utils';
 import { Alert, KeenIcon } from '@/components';
 import { useLayout } from '@/providers';
+
 const initialValues = {
+  username: '',
   email: '',
   password: '',
   changepassword: '',
-  acceptTerms: false
+  acceptTerms: false,
+  role: '' // either "Student" or "Alumni"
 };
+
 const signupSchema = Yup.object().shape({
-  email: Yup.string().email('Wrong email format').min(3, 'Minimum 3 symbols').max(50, 'Maximum 50 symbols').required('Email is required'),
-  password: Yup.string().min(3, 'Minimum 3 symbols').max(50, 'Maximum 50 symbols').required('Password is required'),
-  changepassword: Yup.string().min(3, 'Minimum 3 symbols').max(50, 'Maximum 50 symbols').required('Password confirmation is required').oneOf([Yup.ref('password')], "Password and Confirm Password didn't match"),
-  acceptTerms: Yup.bool().required('You must accept the terms and conditions')
+  username: Yup.string()
+    .min(3, 'Minimum 3 symbols')
+    .max(50, 'Maximum 50 symbols')
+    .required('Username is required'),
+  email: Yup.string()
+    .email('Wrong email format')
+    .min(3, 'Minimum 3 symbols')
+    .max(50, 'Maximum 50 symbols')
+    .required('Email is required'),
+  password: Yup.string()
+    .min(3, 'Minimum 3 symbols')
+    .max(50, 'Maximum 50 symbols')
+    .required('Password is required'),
+  changepassword: Yup.string()
+    .min(3, 'Minimum 3 symbols')
+    .max(50, 'Maximum 50 symbols')
+    .required('Password confirmation is required')
+    .oneOf([Yup.ref('password')], "Password and Confirm Password didn't match"),
+  acceptTerms: Yup.bool().required('You must accept the terms and conditions'),
+  role: Yup.string()
+    .oneOf(['Student', 'Alumni'], 'Please select your role')
+    .required('Role is required')
 });
+
 const Signup = () => {
   const [loading, setLoading] = useState(false);
-  const {
-    register
-  } = useAuthContext();
+  const { register } = useAuthContext();
   const navigate = useNavigate();
   const location = useLocation();
   const from = location.state?.from?.pathname || '/';
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const {
-    currentLayout
-  } = useLayout();
+  const { currentLayout } = useLayout();
+
   const formik = useFormik({
     initialValues,
     validationSchema: signupSchema,
-    onSubmit: async (values, {
-      setStatus,
-      setSubmitting
-    }) => {
+    onSubmit: async (values, { setStatus, setSubmitting }) => {
       setLoading(true);
       try {
         if (!register) {
           throw new Error('JWTProvider is required for this form.');
         }
         await register(values.email, values.password, values.changepassword);
-        navigate(from, {
-          replace: true
-        });
+        navigate(from, { replace: true });
       } catch (error) {
         console.error(error);
         setStatus('The sign up details are incorrect');
@@ -56,15 +71,19 @@ const Signup = () => {
       }
     }
   });
+
   const togglePassword = event => {
     event.preventDefault();
     setShowPassword(!showPassword);
   };
+
   const toggleConfirmPassword = event => {
     event.preventDefault();
     setShowConfirmPassword(!showConfirmPassword);
   };
-  return <div className="card max-w-[370px] w-full">
+
+  return (
+    <div className="card max-w-[370px] w-full">
       <form className="card-body flex flex-col gap-5 p-10" noValidate onSubmit={formik.handleSubmit}>
         <div className="text-center mb-2.5">
           <h3 className="text-lg font-semibold text-gray-900 leading-none mb-2.5">Sign up</h3>
@@ -76,87 +95,149 @@ const Signup = () => {
           </div>
         </div>
 
-        <div className="grid grid-cols-2 gap-2.5">
-          <a href="#" className="btn btn-light btn-sm justify-center">
-            <img src={toAbsoluteUrl('/media/brand-logos/google.svg')} className="size-3.5 shrink-0" />
-            Use Google
-          </a>
-
-          <a href="#" className="btn btn-light btn-sm justify-center">
-            <img src={toAbsoluteUrl('/media/brand-logos/apple-black.svg')} className="size-3.5 shrink-0 dark:hidden" />
-            <img src={toAbsoluteUrl('/media/brand-logos/apple-white.svg')} className="size-3.5 shrink-0 light:hidden" />
-            Use Apple
-          </a>
-        </div>
-
-        <div className="flex items-center gap-2">
-          <span className="border-t border-gray-200 w-full"></span>
-          <span className="text-2xs text-gray-500 font-medium uppercase">Or</span>
-          <span className="border-t border-gray-200 w-full"></span>
-        </div>
-
         {formik.status && <Alert variant="danger">{formik.status}</Alert>}
 
+        {/* Username Field */}
+        <div className="flex flex-col gap-1">
+          <label className="form-label text-gray-900">Username</label>
+          <label className="input">
+            <input
+              placeholder="Username"
+              type="text"
+              autoComplete="off"
+              {...formik.getFieldProps('username')}
+              className={clsx('form-control bg-transparent', {
+                'is-invalid': formik.touched.username && formik.errors.username
+              }, {
+                'is-valid': formik.touched.username && !formik.errors.username
+              })}
+            />
+          </label>
+          {formik.touched.username && formik.errors.username && (
+            <span role="alert" className="text-danger text-xs mt-1">
+              {formik.errors.username}
+            </span>
+          )}
+        </div>
+
+        {/* Email Field */}
         <div className="flex flex-col gap-1">
           <label className="form-label text-gray-900">Email</label>
           <label className="input">
-            <input placeholder="email@email.com" type="email" autoComplete="off" {...formik.getFieldProps('email')} className={clsx('form-control bg-transparent', {
-            'is-invalid': formik.touched.email && formik.errors.email
-          }, {
-            'is-valid': formik.touched.email && !formik.errors.email
-          })} />
+            <input
+              placeholder="email@email.com"
+              type="email"
+              autoComplete="off"
+              {...formik.getFieldProps('email')}
+              className={clsx('form-control bg-transparent', {
+                'is-invalid': formik.touched.email && formik.errors.email
+              }, {
+                'is-valid': formik.touched.email && !formik.errors.email
+              })}
+            />
           </label>
-          {formik.touched.email && formik.errors.email && <span role="alert" className="text-danger text-xs mt-1">
+          {formik.touched.email && formik.errors.email && (
+            <span role="alert" className="text-danger text-xs mt-1">
               {formik.errors.email}
-            </span>}
+            </span>
+          )}
         </div>
 
+        {/* Password Field */}
         <div className="flex flex-col gap-1">
           <label className="form-label text-gray-900">Password</label>
           <label className="input">
-            <input type={showPassword ? 'text' : 'password'} placeholder="Enter Password" autoComplete="off" {...formik.getFieldProps('password')} className={clsx('form-control bg-transparent', {
-            'is-invalid': formik.touched.password && formik.errors.password
-          }, {
-            'is-valid': formik.touched.password && !formik.errors.password
-          })} />
+            <input
+              type={showPassword ? 'text' : 'password'}
+              placeholder="Enter Password"
+              autoComplete="off"
+              {...formik.getFieldProps('password')}
+              className={clsx('form-control bg-transparent', {
+                'is-invalid': formik.touched.password && formik.errors.password
+              }, {
+                'is-valid': formik.touched.password && !formik.errors.password
+              })}
+            />
             <button className="btn btn-icon" onClick={togglePassword}>
-              <KeenIcon icon="eye" className={clsx('text-gray-500', {
-              hidden: showPassword
-            })} />
-              <KeenIcon icon="eye-slash" className={clsx('text-gray-500', {
-              hidden: !showPassword
-            })} />
+              <KeenIcon icon="eye" className={clsx('text-gray-500', { hidden: showPassword })} />
+              <KeenIcon icon="eye-slash" className={clsx('text-gray-500', { hidden: !showPassword })} />
             </button>
           </label>
-          {formik.touched.password && formik.errors.password && <span role="alert" className="text-danger text-xs mt-1">
+          {formik.touched.password && formik.errors.password && (
+            <span role="alert" className="text-danger text-xs mt-1">
               {formik.errors.password}
-            </span>}
+            </span>
+          )}
         </div>
 
+        {/* Confirm Password Field */}
         <div className="flex flex-col gap-1">
           <label className="form-label text-gray-900">Confirm Password</label>
           <label className="input">
-            <input type={showConfirmPassword ? 'text' : 'password'} placeholder="Re-enter Password" autoComplete="off" {...formik.getFieldProps('changepassword')} className={clsx('form-control bg-transparent', {
-            'is-invalid': formik.touched.changepassword && formik.errors.changepassword
-          }, {
-            'is-valid': formik.touched.changepassword && !formik.errors.changepassword
-          })} />
+            <input
+              type={showConfirmPassword ? 'text' : 'password'}
+              placeholder="Re-enter Password"
+              autoComplete="off"
+              {...formik.getFieldProps('changepassword')}
+              className={clsx('form-control bg-transparent', {
+                'is-invalid': formik.touched.changepassword && formik.errors.changepassword
+              }, {
+                'is-valid': formik.touched.changepassword && !formik.errors.changepassword
+              })}
+            />
             <button className="btn btn-icon" onClick={toggleConfirmPassword}>
-              <KeenIcon icon="eye" className={clsx('text-gray-500', {
-              hidden: showConfirmPassword
-            })} />
-              <KeenIcon icon="eye-slash" className={clsx('text-gray-500', {
-              hidden: !showConfirmPassword
-            })} />
+              <KeenIcon icon="eye" className={clsx('text-gray-500', { hidden: showConfirmPassword })} />
+              <KeenIcon icon="eye-slash" className={clsx('text-gray-500', { hidden: !showConfirmPassword })} />
             </button>
           </label>
-          {formik.touched.changepassword && formik.errors.changepassword && <span role="alert" className="text-danger text-xs mt-1">
+          {formik.touched.changepassword && formik.errors.changepassword && (
+            <span role="alert" className="text-danger text-xs mt-1">
               {formik.errors.changepassword}
-            </span>}
+            </span>
+          )}
         </div>
 
+        {/* Role Selection */}
+        <div className="flex flex-col gap-1">
+          <label className="form-label text-gray-900">Role</label>
+          <div role="group" aria-labelledby="role-group" className="flex gap-3">
+            <label className="inline-flex items-center">
+              <input
+                type="radio"
+                name="role"
+                value="Student"
+                checked={formik.values.role === 'Student'}
+                onChange={formik.handleChange}
+                className="radio"
+              />
+              <span className="ml-2">Student</span>
+            </label>
+            <label className="inline-flex items-center">
+              <input
+                type="radio"
+                name="role"
+                value="Alumni"
+                checked={formik.values.role === 'Alumni'}
+                onChange={formik.handleChange}
+                className="radio"
+              />
+              <span className="ml-2">Alumni</span>
+            </label>
+          </div>
+          {formik.touched.role && formik.errors.role && (
+            <span role="alert" className="text-danger text-xs mt-1">
+              {formik.errors.role}
+            </span>
+          )}
+        </div>
+
+        {/* Accept Terms */}
         <label className="checkbox-group">
-          <input className="checkbox checkbox-sm" type="checkbox" {...formik.getFieldProps('acceptTerms')} />
+          <input
+            className="checkbox checkbox-sm"
+            type="checkbox"
+            {...formik.getFieldProps('acceptTerms')}
+          />
           <span className="checkbox-label">
             I accept{' '}
             <Link to="#" className="text-2sm link">
@@ -164,15 +245,18 @@ const Signup = () => {
             </Link>
           </span>
         </label>
-
-        {formik.touched.acceptTerms && formik.errors.acceptTerms && <span role="alert" className="text-danger text-xs mt-1">
+        {formik.touched.acceptTerms && formik.errors.acceptTerms && (
+          <span role="alert" className="text-danger text-xs mt-1">
             {formik.errors.acceptTerms}
-          </span>}
+          </span>
+        )}
 
-        <button type="submit" className="btn btn-primary flex justify-center grow" disabled={loading || formik.isSubmitting}>
+        <button type="submit" className="btn btn-success flex justify-center grow" disabled={loading || formik.isSubmitting}>
           {loading ? 'Please wait...' : 'Sign UP'}
         </button>
       </form>
-    </div>;
+    </div>
+  );
 };
+
 export { Signup };
