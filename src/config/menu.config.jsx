@@ -1,6 +1,6 @@
 export const MENU_SIDEBAR = [{
-  title: 'Dashboards',
-  icon: 'element-11',
+  title: 'Home',
+  icon: 'ki-duotone ki-home',
   children: [{
     title: 'Light Sidebar',
     path: '/'
@@ -8,6 +8,7 @@ export const MENU_SIDEBAR = [{
     title: 'Dark Sidebar',
     path: '/dark-sidebar'
   }]
+
 }, {
   heading: 'Admin'
 }, {
@@ -95,6 +96,10 @@ export const MENU_SIDEBAR = [{
       path: '/public-profile/empty'
     }]
   }]
+
+
+//MY ACCOUNT
+
 }, {
   title: 'My Account',
   icon: 'setting-2',
@@ -222,6 +227,11 @@ export const MENU_SIDEBAR = [{
       path: '/account/activity'
     }]
   }]
+
+
+// NETWORK
+
+
 }, {
   title: 'Network',
   icon: 'users',
@@ -280,8 +290,97 @@ export const MENU_SIDEBAR = [{
     path: '/network/donators',
     disabled: true
   }]
-}
+},
+  //END NETWORK
+
+
+  //START OF GTTS SIDE MENU
+
+  //add a student sidebar menu 
+  {
+    title: 'Supervisors',
+    icon: 'ki-duotone ki-users', // Represents supervision or approval
+    path: '/list/supervisors',
+  },
+  
+  {
+    title: 'Students',
+    icon: 'ki-duotone ki-teacher', // Represents students and education
+    path: '/list/students',
+  },
+  
+  {
+    title: 'Alumnis',
+    icon: 'ki-duotone ki-people', // Represents alumni in a professional context
+    path: '/list/alumnis',
+  },
+  
+  {
+    title: 'Programs',
+    icon: 'book-open', // Represents educational programs or courses
+    path: '/programs',
+  },
+  
+  {
+    title: 'Scheduled Trainings',
+    icon: 'ki-duotone ki-calendar-8', // Represents scheduled sessions or training
+    path: '/trainings',
+  },
+  
+  {
+    title: 'Events',
+    icon: 'ki-duotone ki-calendar-search', // Represents events and scheduling
+    path: '/events',
+  },
+  
+  {
+    title: 'Announcements',
+    icon: 'ki-duotone ki-message-notify', // Represents news or announcements
+    path: '/announcements',
+  },
+
+  {
+    title: 'Settings',
+    icon: 'ki-duotone ki-setting-4',
+    children: [
+      {
+        title: 'User Management',
+        icon: 'ki-duotone ki-user-check',
+        path: '/settings/user-management'
+      },
+      {
+        title: 'Roles & Permissions',
+        icon: 'ki-duotone ki-shield',
+        path: '/settings/roles-permissions'
+      },
+      {
+        title: 'System Configuration',
+        icon: 'ki-duotone ki-cog',
+        path: '/settings/system-config'
+      },
+      {
+        title: 'Audit Logs',
+        icon: 'ki-duotone ki-clipboard-list',
+        path: '/settings/audit-logs'
+      },
+      {
+        title: 'Notification Settings',
+        icon: 'ki-duotone ki-bell',
+        path: '/settings/notifications'
+      }
+    ]
+  }
+  
 ];
+
+
+
+
+//TOP PART OF THE MENU
+
+
+
+
 export const MENU_MEGA = [{
   title: 'Home',
   path: '/'

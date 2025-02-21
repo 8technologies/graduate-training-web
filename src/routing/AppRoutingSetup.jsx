@@ -4,17 +4,49 @@ import { SupervisorContent, ProfileActivityPage, ProfileBloggerPage, CampaignsCa
 import { AccountActivityPage, AccountAllowedIPAddressesPage, AccountApiKeysPage, AccountAppearancePage, AccountBackupAndRecoveryPage, AccountBasicPage, AccountCompanyProfilePage, AccountCurrentSessionsPage, AccountDeviceManagementPage, AccountEnterprisePage, AccountGetStartedPage, AccountHistoryPage, AccountImportMembersPage, AccountIntegrationsPage, AccountInviteAFriendPage, AccountMembersStarterPage, AccountNotificationsPage, AccountOverviewPage, AccountPermissionsCheckPage, AccountPermissionsTogglePage, AccountPlansPage, AccountPrivacySettingsPage, AccountRolesPage, AccountSecurityGetStartedPage, AccountSecurityLogPage, AccountSettingsEnterprisePage, AccountSettingsModalPage, AccountSettingsPlainPage, AccountSettingsSidebarPage, AccountTeamInfoPage, AccountTeamMembersPage, AccountTeamsPage, AccountTeamsStarterPage, AccountUserProfilePage } from '@/pages/account';
 import { NetworkAppRosterPage, NetworkMarketAuthorsPage, NetworkAuthorPage, NetworkGetStartedPage, NetworkMiniCardsPage, NetworkNFTPage, NetworkSocialPage, NetworkUserCardsTeamCrewPage, NetworkSaasUsersPage, NetworkStoreClientsPage, NetworkUserTableTeamCrewPage, NetworkVisitorsPage } from '@/pages/network';
 import { AuthPage } from '@/auth';
-// import { SupervisorContent } from '@/pages/supervisor';
 import { RequireAuth } from '@/auth/RequireAuth';
 import { Demo1Layout } from '@/layouts/demo1';
 import { ErrorsRouting } from '@/errors';
 import { AuthenticationWelcomeMessagePage, AuthenticationAccountDeactivatedPage, AuthenticationGetStartedPage } from '@/pages/authentication';
+
+
+import SupervisorPageList from '@/pages/list/supervisors/SupervisorPageList';
+import { StudentPageList } from '../pages/list/students';
+import { AlumniPageList } from '../pages/list/alumnis';
+import { ProgramPageList } from '../pages/programs';
+import { ScheduledTrainingPageList } from '../pages/scheduledtrainings';
+import { EventsPageList } from '../pages/events';
+import AnnoucementsPageList from '@/pages/announcements/AnnoucementsPageList';
+
+
 const AppRoutingSetup = () => {
   return <Routes>
     <Route element={<RequireAuth />}>
       <Route element={<Demo1Layout />}>
         <Route path="/" element={<DefaultPage />} />
-        <Route path="/dark-sidebar" element={<Demo1DarkSidebarPage />} />
+        <Route path="/dark-sidebar" element={<Demo1DarkSidebarPage />} /> 
+        {/* supervisor */}
+        <Route path="/list/supervisors" element={<SupervisorPageList />} />
+          
+        {/* student */}
+        <Route path="/list/students" element={<StudentPageList />} />
+
+        {/* alumni */}
+        <Route path="/list/alumnis" element={<AlumniPageList />} />
+          
+        {/* programs */}  
+        <Route path="/programs" element={<ProgramPageList />} />
+
+        {/* trainings */}  
+        <Route path="/trainings" element={<ScheduledTrainingPageList />} />
+
+        {/* events */}  
+        <Route path="/events" element={<EventsPageList />} />
+
+        {/* announcements */}  
+        <Route path="/announcements" element={<AnnoucementsPageList />} />
+
+
         <Route path="/supervisor/profiles" element={<SupervisorContent />} />
         <Route path="/public-profile/profiles/default" element={<ProfileDefaultPage />} />
         <Route path="/public-profile/profiles/creator" element={<ProfileCreatorPage />} />

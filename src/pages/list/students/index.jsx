@@ -1,0 +1,1 @@
+export { default as StudentPageList } from './StudentPageList';
