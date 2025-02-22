@@ -1,3 +1,7 @@
+import { CountChart } from '../../../../components/charts';
+import Announcements from '../../../../components/charts/Announcements';
+import AttendanceChart from '../../../../components/charts/AttendanceChart';
+import EventCalendar from '../../../../components/charts/EventCalendar';
 import { ChannelStats, EarningsChart, EntryCallout, Highlights, TeamMeeting, Teams } from './blocks';
 const Demo1LightSidebarContent = () => {
   return <div className="grid gap-5 lg:gap-7.5">
@@ -9,7 +13,7 @@ const Demo1LightSidebarContent = () => {
         </div>
 
         <div className="lg:col-span-2">
-          <EntryCallout className="h-full" />
+          < CountChart />
         </div>
       </div>
 
@@ -19,17 +23,17 @@ const Demo1LightSidebarContent = () => {
         </div>
 
         <div className="lg:col-span-2">
-          <EarningsChart />
+          <Announcements />
         </div>
       </div>
 
       <div className="grid lg:grid-cols-3 gap-5 lg:gap-7.5 items-stretch">
         <div className="lg:col-span-1">
-          <TeamMeeting />
+          <AttendanceChart />
         </div>
 
         <div className="lg:col-span-2">
-          <Teams />
+        <EventCalendar />
         </div>
       </div>
     </div>;

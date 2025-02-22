@@ -114,4 +114,4 @@ const HeaderTopbar = () => {
       </Menu>
     </div>;
 };
-export { HeaderTopbar };
+export default HeaderTopbar;

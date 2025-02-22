@@ -108,4 +108,4 @@ const Sidebar = () => {
     </Sheet>;
   }
 };
-export { Sidebar };
+export default Sidebar;

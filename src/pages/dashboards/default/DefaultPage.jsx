@@ -1,10 +1,26 @@
+import React from 'react';
 import { useLayout } from '@/providers';
+
+// Existing demo pages (if needed)
 import { Demo1LightSidebarPage, Demo2Page, Demo3Page, Demo4Page, Demo5Page } from '../';
+
+// New dashboard imports for each role
+import AdminDashboard from '../admin/AdminDashboard';
+import AdminDashboardLayout from '../admin/AdminDashboardLayout';
+
+
+
 const DefaultPage = () => {
-  const {
-    currentLayout
-  } = useLayout();
-  if (currentLayout?.name === 'demo1-layout') {
+  const { currentLayout } = useLayout();
+
+  if (currentLayout?.name === 'admin-layout') {
+    return (
+      <AdminDashboardLayout>
+        <AdminDashboard />
+      </AdminDashboardLayout>
+    );
+  
+  } else if (currentLayout?.name === 'demo1-layout') {
     return <Demo1LightSidebarPage />;
   } else if (currentLayout?.name === 'demo2-layout') {
     return <Demo2Page />;
@@ -25,5 +41,9 @@ const DefaultPage = () => {
   } else if (currentLayout?.name === 'demo10-layout') {
     return <Demo3Page />;
   }
+
+  // Fallback
+  return <div>No layout selected</div>;
 };
+
 export { DefaultPage };

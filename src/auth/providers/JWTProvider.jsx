@@ -1,114 +1,95 @@
-/* eslint-disable no-unused-vars */
-import axios from 'axios';
-import { createContext, useState } from 'react';
-import * as authHelper from '../_helpers';
+import axios from "axios";
+import { createContext, useState, useEffect } from "react";
+import * as authHelper from "../_helpers";
+
 const API_URL = import.meta.env.VITE_APP_API_URL;
 export const LOGIN_URL = `${API_URL}/login`;
-export const REGISTER_URL = `${API_URL}/register`;
-export const FORGOT_PASSWORD_URL = `${API_URL}/forgot-password`;
-export const RESET_PASSWORD_URL = `${API_URL}/reset-password`;
+export const LOGOUT_URL = `${API_URL}/logout`;
 export const GET_USER_URL = `${API_URL}/user`;
+
 const AuthContext = createContext(null);
-const AuthProvider = ({
-  children
-}) => {
-  const [loading, setLoading] = useState(true);
+
+const AuthProvider = ({ children }) => {
+  const [loading, setLoading] = useState(true); // ✅ Set initial loading state
   const [auth, setAuth] = useState(authHelper.getAuth());
-  const [currentUser, setCurrentUser] = useState();
-  const verify = async () => {
-    if (auth) {
-      try {
-        const {
-          data: user
-        } = await getUser();
-        setCurrentUser(user);
-      } catch {
-        saveAuth(undefined);
-        setCurrentUser(undefined);
-      }
-    }
-  };
-  const saveAuth = auth => {
-    setAuth(auth);
-    if (auth) {
-      authHelper.setAuth(auth);
+  const [currentUser, setCurrentUser] = useState(null);
+
+  useEffect(() => {
+    console.log("DEBUG: Auth state on mount ->", auth);
+    verify(); // ✅ Automatically verify user on page load
+  }, []);
+
+  const saveAuth = (authData) => {
+    if (authData?.token) {
+      setAuth(authData);
+      authHelper.setAuth(authData);
+      axios.defaults.headers.Authorization = `Bearer ${authData.token}`;
     } else {
+      setAuth(null);
       authHelper.removeAuth();
+      delete axios.defaults.headers.Authorization;
     }
   };
+
   const login = async (email, password) => {
     try {
-      const {
-        data: auth
-      } = await axios.post(LOGIN_URL, {
-        email,
-        password
-      });
-      saveAuth(auth);
-      const {
-        data: user
-      } = await getUser();
-      setCurrentUser(user);
+      const { data } = await axios.post(LOGIN_URL, { email, password });
+
+      if (data?.token && data?.user) {
+        saveAuth(data);
+        setCurrentUser(data.user);
+      } else {
+        throw new Error("Invalid response format");
+      }
     } catch (error) {
-      saveAuth(undefined);
-      throw new Error(`Error ${error}`);
+      saveAuth(null);
+      throw new Error(error.response?.data?.message || "Login failed");
     }
   };
-  const register = async (email, password, password_confirmation) => {
-    try {
-      const {
-        data: auth
-      } = await axios.post(REGISTER_URL, {
-        email,
-        password,
-        password_confirmation
-      });
-      saveAuth(auth);
-      const {
-        data: user
-      } = await getUser();
-      setCurrentUser(user);
-    } catch (error) {
-      saveAuth(undefined);
-      throw new Error(`Error ${error}`);
-    }
-  };
-  const requestPasswordResetLink = async email => {
-    await axios.post(FORGOT_PASSWORD_URL, {
-      email
-    });
-  };
-  const changePassword = async (email, token, password, password_confirmation) => {
-    await axios.post(RESET_PASSWORD_URL, {
-      email,
-      token,
-      password,
-      password_confirmation
-    });
-  };
+
   const getUser = async () => {
-    return await axios.get(GET_USER_URL);
+    try {
+      const { data } = await axios.get(GET_USER_URL);
+      console.log("DEBUG: User fetched ->", data);
+      setCurrentUser(data);
+      return data;
+    } catch (error) {
+      saveAuth(null);
+      setCurrentUser(null);
+      console.error("DEBUG: Failed to fetch user ->", error);
+      throw new Error("Failed to fetch user details");
+    }
   };
-  const logout = () => {
-    saveAuth(undefined);
-    setCurrentUser(undefined);
+
+  const verify = async () => {
+    if (auth?.token) {
+      try {
+        const user = await getUser();
+        setCurrentUser(user);
+      } catch (error) {
+        console.error("DEBUG: User verification failed ->", error);
+        saveAuth(null);
+        setCurrentUser(null);
+      }
+    }
+    setLoading(false); // ✅ Set loading to false after verification
   };
-  return <AuthContext.Provider value={{
-    loading,
-    setLoading,
-    auth,
-    saveAuth,
-    currentUser,
-    setCurrentUser,
-    login,
-    register,
-    requestPasswordResetLink,
-    changePassword,
-    getUser,
-    logout,
-    verify
-  }}>
+
+  const logout = async () => {
+    try {
+      await axios.post(LOGOUT_URL);
+    } catch (error) {
+      console.error("Logout failed:", error);
+    }
+    saveAuth(null);
+    setCurrentUser(null);
+  };
+
+  return (
+    <AuthContext.Provider value={{ loading, setLoading, auth, currentUser, login, getUser, logout, verify }}>
       {children}
-    </AuthContext.Provider>;
+    </AuthContext.Provider>
+  );
 };
+
 export { AuthContext, AuthProvider };
