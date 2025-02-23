@@ -11,7 +11,7 @@ import { AuthenticationWelcomeMessagePage, AuthenticationAccountDeactivatedPage,
 
 // Existing list pages
 import SupervisorPageList from '@/pages/list/supervisors/SupervisorPageList';
-import { StudentPageList } from '../pages/list/students';
+import { StudentPageList, StudentProfile } from '../pages/list/students';
 import { AlumniPageList } from '../pages/list/alumnis';
 import { ProgramPageList } from '../pages/programs';
 import { ScheduledTrainingPageList } from '../pages/scheduledtrainings';
@@ -21,6 +21,7 @@ import AnnoucementsPageList from '@/pages/announcements/AnnoucementsPageList';
 // New dashboard imports (adjust the paths if using relative imports)
 import { AdminDashboard } from '../pages/dashboards/admin';
 import { AdminDashboardLayout } from '../pages/dashboards/admin';
+import { AddStudentsForm }  from '../pages/list/forms';
 
 
 const AppRoutingSetup = () => {
@@ -40,6 +41,14 @@ const AppRoutingSetup = () => {
           <Route path="/events" element={<EventsPageList />} />
           <Route path="/announcements" element={<AnnoucementsPageList />} />
 
+          {/* Forms */}
+          <Route path="/students/add" element={<AddStudentsForm />} />
+
+
+          {/* SingleProfilePages */}
+
+          <Route path="/students/:id" element={<StudentProfile />} />
+          
           {/* Public profiles and account routes ... */}
           <Route path="/supervisor/profiles" element={<SupervisorContent />} />
           {/* ... other existing routes ... */}
