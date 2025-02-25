@@ -3,7 +3,7 @@ export const MENU_SIDEBAR = [{
   icon: 'ki-duotone ki-home',
   children: [{
     title: 'Light Sidebar',
-    path: '/'
+    path: '/admin/dashboard'
   }, {                                                                        //menu.config
     title: 'Dark Sidebar',
     path: '/dark-sidebar'
@@ -95,7 +95,7 @@ export const MENU_SIDEBAR = [{
 export const MENU_MEGA = [
   {
   title: 'Home',
-  path: '/'
+  path: '/admin/dashboard'
 },
 
 {

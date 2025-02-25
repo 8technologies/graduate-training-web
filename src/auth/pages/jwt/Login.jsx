@@ -93,7 +93,8 @@ const Login = () => {
       >
         <div className="text-center mb-2.5">
           <h3 className="text-lg font-semibold text-gray-900 leading-none mb-2.5">
-            Sign in
+            Sign in to 
+            <h2>Graduate Training and Tracking System</h2>
           </h3>
           <div className="flex items-center justify-center font-medium">
             <span className="text-2sm text-gray-600 me-1.5">
