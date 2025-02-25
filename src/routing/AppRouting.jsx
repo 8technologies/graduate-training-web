@@ -6,7 +6,7 @@ import { AppRoutingSetup } from '.';
 const AppRouting = () => {
   const {
     setProgressBarLoader
-  } = useLoaders();
+  } = useLoaders();   
   const {
     verify,
     setLoading

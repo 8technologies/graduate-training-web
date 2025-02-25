@@ -5,6 +5,7 @@ import { Link } from "react-router-dom"; // ✅ Import Link for navigation
 
 const ChannelStats = () => {
   const [studentCount, setStudentCount] = useState(0);
+  const [supervisorCount, setSupervisorCount] = useState(0);
 
   // Fetch the student count from the API when the component mounts.
   useEffect(() => {
@@ -19,6 +20,17 @@ const ChannelStats = () => {
       });
   }, []);
 
+  useEffect(() => {
+    axios.get("http://127.0.0.1:8000/api/supervisors")
+      .then((response) => {
+        const supervisors = response.data.data || [];
+        setSupervisorCount(supervisors.length);
+      })
+      .catch((error) => {
+        console.error("Error fetching supervisors:", error);
+      });
+  }, []);
+
   const items = [
     {
       logo: "/metronic/tailwind/react/media/images/programs.png",
@@ -28,7 +40,7 @@ const ChannelStats = () => {
     },
     {
       logo: "/metronic/tailwind/react/media/images/superviso1.png",
-      info: "20",
+      info: supervisorCount.toString(), // dynamic count from API
       desc: "Supervisors",
       path: "/list/supervisors", // ✅ Link to Supervisors List
     },

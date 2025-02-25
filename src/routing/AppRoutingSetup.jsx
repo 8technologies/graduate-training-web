@@ -20,6 +20,9 @@ import AnnoucementsPageList from '@/pages/announcements/AnnoucementsPageList';
 
 // New dashboard imports (adjust the paths if using relative imports)
 import { AdminDashboard } from '../pages/dashboards/admin';
+import { StudentDashboard } from '../pages/dashboards/student';
+import { SupervisorDashboard } from '../pages/dashboards/supervisor';
+import { AlumniDashboard } from '../pages/dashboards/alumni';
 import { AdminDashboardLayout } from '../pages/dashboards/admin';
 import { AddStudentsForm }  from '../pages/list/forms';
 
@@ -29,7 +32,15 @@ const AppRoutingSetup = () => {
     <Routes>
       <Route element={<RequireAuth />}>
         <Route element={<Demo1Layout />}>
-          <Route path="/" element={<DefaultPage />} />
+
+
+            {/* Role-Based Dashboards */}
+          <Route path="/admin/dashboard" element={<AdminDashboard />} />
+          <Route path="/student/dashboard" element={<StudentDashboard />} />
+          <Route path="/supervisor/dashboard" element={<SupervisorDashboard />} />x
+          <Route path="/alumni/dashboard" element={<AlumniDashboard />} />
+          
+         
           <Route path="/dark-sidebar" element={<Demo1DarkSidebarPage />} /> 
           
           {/* List pages */}
@@ -67,7 +78,7 @@ const AppRoutingSetup = () => {
           <Route path="/demo4" element={<Demo4Page />} />
           <Route path="/demo5" element={<Demo5Page />} />
           <Route path="/demo6" element={<Demo4Page />} />
-          <Route path="/demo7" element={<Demo2Page />} />
+          <Route path="/demo7" element={<Demo2Page />} />  
           <Route path="/demo8" element={<Demo4Page />} />
           <Route path="/demo9" element={<Demo2Page />} />
           <Route path="/demo10" element={<Demo3Page />} />
@@ -75,7 +86,7 @@ const AppRoutingSetup = () => {
       </Route>
       <Route path="error/*" element={<ErrorsRouting />} />
       <Route path="auth/*" element={<AuthPage />} />
-      <Route path="*" element={<Navigate to="/error/404" />} />
+      <Route path="*" element={<Navigate to="/auth" />} />
     </Routes>
   );
 };

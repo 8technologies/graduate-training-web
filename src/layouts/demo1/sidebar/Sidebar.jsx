@@ -10,7 +10,7 @@ import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle } from '
 export const Sidebar = () => {
   const selfRef = useRef(null);
   const headerRef = useRef(null);
-  const [scrollableHeight, setScrollableHeight] = useState(0);
+  const [scrollableHeight, setScrollableHeight] = useState(0);                       //Sidebar.jsx
   const scrollableOffset = 40;
   const [viewportHeight] = useViewport();
   const {
@@ -18,7 +18,7 @@ export const Sidebar = () => {
     prevPathname
   } = usePathname();
   useEffect(() => {
-    if (headerRef.current) {
+    if (headerRef.current) {                                                             
       const headerHeight = getHeight(headerRef.current);
       const availableHeight = viewportHeight - headerHeight - scrollableOffset;
       setScrollableHeight(availableHeight);

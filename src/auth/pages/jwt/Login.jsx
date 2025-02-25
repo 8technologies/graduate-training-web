@@ -31,8 +31,7 @@ const Login = () => {
   const [loading, setLoading] = useState(false);
   const { login } = useAuthContext();
   const navigate = useNavigate();
-  const location = useLocation();
-  const from = location.state?.from?.pathname || '/';
+  // For role-based redirection, ignore the "from" location.
   const [showPassword, setShowPassword] = useState(false);
   const { currentLayout } = useLayout();
 
@@ -48,7 +47,8 @@ const Login = () => {
           throw new Error('JWTProvider is required for this form.');
         }
 
-        await login(values.email, values.password);
+        // Assume login returns the user object with role_id
+        const user = await login(values.email, values.password);
 
         if (values.remember) {
           localStorage.setItem('email', values.email);
@@ -56,7 +56,20 @@ const Login = () => {
           localStorage.removeItem('email');
         }
 
-        navigate(from, { replace: true });
+        // Role-based redirection:
+        if (user && user.role_id === 4) {
+          navigate("/admin/dashboard", { replace: true });
+        } else if (user && user.role_id === 3) {
+          navigate("/alumni/dashboard", { replace: true });
+        } else if (user && user.role_id === 2) {
+          // Make sure this matches your routing setup (plural 'supervisors')
+          navigate("/supervisor/dashboard", { replace: true });
+        } else if (user && user.role_id === 1) {
+          navigate("/student/dashboard", { replace: true });
+        } else {
+          // Fallback redirection if role is not recognized.
+          navigate("/auth/login", { replace: true });
+        }
       } catch (error) {
         setStatus(error.message || 'Invalid login credentials');
         setSubmitting(false);

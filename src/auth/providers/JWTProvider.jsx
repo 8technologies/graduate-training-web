@@ -7,16 +7,19 @@ export const LOGIN_URL = `${API_URL}/login`;
 export const LOGOUT_URL = `${API_URL}/logout`;
 export const GET_USER_URL = `${API_URL}/user`;
 
+// Leave the user object as returned without transforming fields.
+const transformUser = (user) => user;
+
 const AuthContext = createContext(null);
 
 const AuthProvider = ({ children }) => {
-  const [loading, setLoading] = useState(true); // ✅ Set initial loading state
+  const [loading, setLoading] = useState(true);
   const [auth, setAuth] = useState(authHelper.getAuth());
   const [currentUser, setCurrentUser] = useState(null);
 
   useEffect(() => {
     console.log("DEBUG: Auth state on mount ->", auth);
-    verify(); // ✅ Automatically verify user on page load
+    verify();
   }, []);
 
   const saveAuth = (authData) => {
@@ -34,10 +37,11 @@ const AuthProvider = ({ children }) => {
   const login = async (email, password) => {
     try {
       const { data } = await axios.post(LOGIN_URL, { email, password });
-
       if (data?.token && data?.user) {
+        const transformedUser = transformUser(data.user);
         saveAuth(data);
-        setCurrentUser(data.user);
+        setCurrentUser(transformedUser);
+        return transformedUser;
       } else {
         throw new Error("Invalid response format");
       }
@@ -51,8 +55,9 @@ const AuthProvider = ({ children }) => {
     try {
       const { data } = await axios.get(GET_USER_URL);
       console.log("DEBUG: User fetched ->", data);
-      setCurrentUser(data);
-      return data;
+      const transformedUser = transformUser(data);
+      setCurrentUser(transformedUser);
+      return transformedUser;
     } catch (error) {
       saveAuth(null);
       setCurrentUser(null);
@@ -65,14 +70,16 @@ const AuthProvider = ({ children }) => {
     if (auth?.token) {
       try {
         const user = await getUser();
+        // No enforcement for students—fields remain as returned.
         setCurrentUser(user);
       } catch (error) {
         console.error("DEBUG: User verification failed ->", error);
         saveAuth(null);
         setCurrentUser(null);
+        window.location.href = '/metronic/tailwind/react/auth';
       }
     }
-    setLoading(false); // ✅ Set loading to false after verification
+    setLoading(false);
   };
 
   const logout = async () => {

@@ -31,4 +31,4 @@ const AuthPage = () => <Routes>
       <Route path="*" element={<Navigate to="/error/404" />} />
     </Route>
   </Routes>;
-export { AuthPage };
+export { AuthPage };  

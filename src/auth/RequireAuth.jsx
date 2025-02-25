@@ -5,7 +5,7 @@ const RequireAuth = () => {
   const {
     auth,
     loading
-  } = useAuthContext();
+  } = useAuthContext();                                                        //RequireAuth.jsx
   const location = useLocation();
   if (loading) {
     return <ScreenLoader />;

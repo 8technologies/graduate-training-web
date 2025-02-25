@@ -125,7 +125,7 @@ const Demo1LayoutProvider = ({
       headerSticky,
       mobileSidebarOpen,
       mobileMegaMenuOpen,
-      megaMenuEnabled,
+      megaMenuEnabled,                                                                   //Demo1LayoutProvider.jsx
       sidebarMouseLeave,
       setMobileSidebarOpen,
       setMegaMenuEnabled,
