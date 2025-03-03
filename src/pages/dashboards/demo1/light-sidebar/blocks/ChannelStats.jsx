@@ -3,13 +3,15 @@ import axios from "axios";
 import { toAbsoluteUrl } from "@/utils/Assets";
 import { Link } from "react-router-dom"; // ✅ Import Link for navigation
 
+const API_URL = import.meta.env.VITE_APP_API_URL;
+
 const ChannelStats = () => {
   const [studentCount, setStudentCount] = useState(0);
   const [supervisorCount, setSupervisorCount] = useState(0);
 
   // Fetch the student count from the API when the component mounts.
   useEffect(() => {
-    axios.get("http://127.0.0.1:8000/api/students")
+    axios.get(`${API_URL}/students`)     
       .then((response) => {
         // Assuming your API returns a data property that is an array of students.
         const students = response.data.data || [];
@@ -21,7 +23,7 @@ const ChannelStats = () => {
   }, []);
 
   useEffect(() => {
-    axios.get("http://127.0.0.1:8000/api/supervisors")
+    axios.get(`${API_URL}/supervisors`)
       .then((response) => {
         const supervisors = response.data.data || [];
         setSupervisorCount(supervisors.length);

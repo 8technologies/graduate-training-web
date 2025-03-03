@@ -7,6 +7,7 @@ import { z } from "zod";
 import { toast } from "sonner";
 import { motion } from "framer-motion";
 
+// Updated schema: removed course_id field.
 const schema = z.object({
   first_name: z.string().min(2, "First name is required"),
   last_name: z.string().min(2, "Last name is required"),
@@ -15,16 +16,14 @@ const schema = z.object({
     .string()
     .length(10, "Phone number must be exactly 10 digits")
     .regex(/^\d+$/, "Phone number must contain only numbers"),
-  course_id: z.string().nonempty("Select a Program"),
 });
 
 const API_URL = "http://127.0.0.1:8000/api/supervisors";
 
 const EditSupervisorForm = ({ open, handleClose, supervisor, onSupervisorUpdated }) => {
-  const [courses, setCourses] = useState([]);
   const [initialValues, setInitialValues] = useState(null);
 
-  const { register, handleSubmit, reset, setValue, formState: { errors } } = useForm({
+  const { register, handleSubmit, reset, formState: { errors } } = useForm({
     resolver: zodResolver(schema),
   });
 
@@ -35,19 +34,11 @@ const EditSupervisorForm = ({ open, handleClose, supervisor, onSupervisorUpdated
         last_name: supervisor.last_name || "",
         email: supervisor.email || "",
         telephone: supervisor.telephone || "",
-        course_id: supervisor.course_id ? String(supervisor.course_id) : "",
       };
       reset(formValues);
       setInitialValues(formValues);
-      setValue("course_id", formValues.course_id);
     }
-  }, [supervisor, reset, setValue]);
-
-  useEffect(() => {
-    axios.get("http://127.0.0.1:8000/api/courses")
-      .then((response) => setCourses(response.data.data || []))
-      .catch(() => toast.error("Failed to fetch courses"));
-  }, []);
+  }, [supervisor, reset]);
 
   const isFormChanged = (newData) => {
     return JSON.stringify(newData) !== JSON.stringify(initialValues);
@@ -69,20 +60,6 @@ const EditSupervisorForm = ({ open, handleClose, supervisor, onSupervisorUpdated
       console.error("Error updating supervisor:", error.response ? error.response.data : error);
       toast.error(`Ooops!!! ${error.response?.data?.error || "Unknown error"}`);
     }
-  };
-
-  const renderOptions = (items, fieldName, defaultText) => {
-    const currentValue = supervisor ? supervisor[fieldName] : "";
-    return (
-      <>
-        <option value="">{defaultText}</option>
-        {items.map((item) => (
-          <option key={item.id} value={String(item.id)} selected={String(item.id) === String(currentValue)}>
-            {item.name}
-          </option>
-        ))}
-      </>
-    );
   };
 
   return (
@@ -131,13 +108,6 @@ const EditSupervisorForm = ({ open, handleClose, supervisor, onSupervisorUpdated
             <label className="block text-sm font-medium text-gray-700">Phone Number</label>
             <input type="tel" {...register("telephone")} className="input w-full border p-2 rounded-md focus:ring-2 focus:ring-blue-500" />
             {errors.telephone && <p className="text-red-500 text-xs mt-1">{errors.telephone.message}</p>}
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700">Program</label>
-            <select {...register("course_id")} className="input w-full border p-2 rounded-md focus:ring-2 focus:ring-blue-500">
-              {renderOptions(courses, "course_id", "Select a Program")}
-            </select>
-            {errors.course_id && <p className="text-red-500 text-xs mt-1">{errors.course_id.message}</p>}
           </div>
         </motion.form>
       </DialogContent>

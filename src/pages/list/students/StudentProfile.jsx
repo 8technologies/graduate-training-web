@@ -1,9 +1,17 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { Dialog, DialogTitle, DialogContent, DialogActions, Slide } from "@mui/material";
+import {
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  Slide,
+  CircularProgress,
+} from "@mui/material";
 import { motion } from "framer-motion";
 import { toast } from "sonner";
-import { ProgressIndicatorChart} from "../../../components/charts";  
+import { ProgressIndicatorChart } from "../../../components/charts";
+import { AiOutlineClose } from "react-icons/ai";
 
 const API_URL = "http://127.0.0.1:8000/api/students";
 
@@ -15,7 +23,8 @@ const StudentProfileModal = ({ open, handleClose, studentId }) => {
     if (!studentId || !open) return;
 
     setLoading(true);
-    axios.get(`${API_URL}/${studentId}`)
+    axios
+      .get(`${API_URL}/${studentId}`)
       .then((response) => {
         if (response.data.success) {
           setStudent(response.data.data);
@@ -42,8 +51,10 @@ const StudentProfileModal = ({ open, handleClose, studentId }) => {
       </DialogTitle>
 
       <DialogContent className="p-8 bg-gradient-to-b from-blue-50 to-white rounded-md shadow-md">
-        {loading && open ? (
-          <p className="text-center text-gray-500 animate-pulse">Loading student data...</p>
+        {loading ? (
+          <div className="flex items-center justify-center h-64">
+            <CircularProgress size={48} color="primary" />
+          </div>
         ) : !student ? (
           <p className="text-center text-red-500">Student not found.</p>
         ) : (
@@ -142,8 +153,6 @@ const StudentProfileModal = ({ open, handleClose, studentId }) => {
               <h1 className="text-lg font-semibold">📈 Student Progress WorkRate</h1>
               <ProgressIndicatorChart />
             </div>
-
-            
           </>
         )}
       </DialogContent>
@@ -152,10 +161,11 @@ const StudentProfileModal = ({ open, handleClose, studentId }) => {
       <DialogActions className="p-4 flex justify-center bg-gray-100 rounded-b-lg">
         <motion.button
           whileHover={{ scale: 1.1 }}
-          className="btn bg-red-600 hover:bg-red-700 text-white px-6 py-2 rounded-lg"
+          className="btn bg-red-600 hover:bg-red-700 text-white px-6 py-2 rounded-lg flex items-center gap-2"
           onClick={handleClose}
         >
-          ❌ Close
+          <span>Close</span>
+          <AiOutlineClose size={24} />
         </motion.button>
       </DialogActions>
     </Dialog>

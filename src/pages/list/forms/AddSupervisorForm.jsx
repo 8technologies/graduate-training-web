@@ -7,33 +7,27 @@ import { z } from "zod";
 import { toast } from "sonner";
 import { motion } from "framer-motion";
 
-// Schema for supervisor fields (note: student level is not included)
+// Schema for supervisor fields (course_id removed)
 const schema = z.object({
   first_name: z.string().min(2, "First name is required"),
   last_name: z.string().min(2, "Last name is required"),
   email: z.string().email("Invalid email"),
   telephone: z.string().length(10, "Phone number must be exactly 10 digits"),
   university_id: z.string().nonempty("Select a university"),
-  course_id: z.string().nonempty("Select a Program"),
 });
 
 const AddSupervisorForm = ({ open, handleClose, onSupervisorAdded }) => {
   const [universities, setUniversities] = useState([]);
-  const [courses, setCourses] = useState([]);
 
   const { register, handleSubmit, reset, formState: { errors } } = useForm({
     resolver: zodResolver(schema),
   });
 
-  // Fetch universities and courses for dropdowns
+  // Fetch universities for dropdown
   useEffect(() => {
     axios.get("http://127.0.0.1:8000/api/universities")
       .then((response) => setUniversities(response.data.data || []))
       .catch(() => toast.error("Failed to fetch universities"));
-
-    axios.get("http://127.0.0.1:8000/api/courses")
-      .then((response) => setCourses(response.data.data || []))
-      .catch(() => toast.error("Failed to fetch courses"));
   }, []);
 
   const onSubmit = async (data, event) => {
@@ -41,8 +35,8 @@ const AddSupervisorForm = ({ open, handleClose, onSupervisorAdded }) => {
     const supervisorData = {
       ...data,
       role_id: "2", // Supervisor role
-      password: "pass123",
-      password_confirmation: "pass123",
+      password: "12345678",
+      password_confirmation: "12345678",
     };
 
     try {
@@ -117,19 +111,6 @@ const AddSupervisorForm = ({ open, handleClose, onSupervisorAdded }) => {
               ))}
             </select>
             {errors.university_id && <p className="text-red-500 text-xs mt-1">{errors.university_id.message}</p>}
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700">📚 Program</label>
-            <select {...register("course_id")} className="input w-full border p-2 rounded-md focus:ring-2 focus:ring-blue-500">
-              <option value="">Select a Program</option>
-              {courses.map((course) => (
-                <option key={course.id} value={course.id}>
-                  {course.name}
-                </option>
-              ))}
-            </select>
-            {errors.course_id && <p className="text-red-500 text-xs mt-1">{errors.course_id.message}</p>}
           </div>
         </motion.form>
       </DialogContent>

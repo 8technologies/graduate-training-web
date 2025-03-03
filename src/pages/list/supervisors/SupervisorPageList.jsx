@@ -8,8 +8,11 @@ import EditSupervisorForm from "../forms/EditSupervisorForm";
 import { DeleteConfirmationModal } from "../../../components/messages";
 import { useNavigate } from "react-router-dom";
 import SupervisorProfileModal from "./SupervisorProfile";
+import { CircularProgress } from "@mui/material";  // Progress indicator
 
 const API_URL = "http://127.0.0.1:8000/api/supervisors";
+//const API_URL = "https://gtts-api.comfarnet.org/api/supervisors";
+
 
 const SupervisorPageList = () => {
   const navigate = useNavigate();
@@ -44,7 +47,7 @@ const SupervisorPageList = () => {
     }
   };
 
-  const handleDeleteConfirm = async () => {
+  const handleSupervisorDelete = async () => {
     if (!supervisorToDelete) return;
     try {
       const response = await axios.delete(`${API_URL}/${supervisorToDelete.id}`);
@@ -137,11 +140,6 @@ const SupervisorPageList = () => {
       cell: ({ row }) => <span className="text-gray-700 font-normal">{row.original.telephone}</span>,
     },
     {
-      accessorKey: "course_name",
-      header: ({ column }) => <DataGridColumnHeader title="Program" column={column} />,
-      cell: ({ row }) => <span className="text-gray-700 font-normal">{row.original.course_name || "N/A"}</span>,
-    },
-    {
       accessorKey: "university_name",
       header: ({ column }) => <DataGridColumnHeader title="University" column={column} />,
       cell: ({ row }) => <span className="text-gray-700 font-normal">{row.original.university_name || "N/A"}</span>,
@@ -219,7 +217,9 @@ const SupervisorPageList = () => {
   return (
     <div className="card p-6">
       {loading ? (
-        <p className="text-center text-gray-500">Loading supervisors...</p>
+        <div className="flex items-center justify-center h-64">
+          <CircularProgress size={48} color="primary" />
+        </div>
       ) : (
         <DataGrid
           columns={columns}
@@ -257,8 +257,9 @@ const SupervisorPageList = () => {
       <DeleteConfirmationModal
         open={deleteModalOpen}
         handleClose={() => setDeleteModalOpen(false)}
-        handleConfirm={handleDeleteConfirm}
-        student={supervisorToDelete}
+        handleConfirm={handleSupervisorDelete} // your delete handler for supervisors
+        item={supervisorToDelete}             // the supervisor object to delete
+        entityLabel="Supervisor"
       />
     </div>
   );

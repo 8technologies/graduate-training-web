@@ -8,6 +8,8 @@ import { toAbsoluteUrl } from '@/utils';
 import { Alert, KeenIcon } from '@/components';
 import { useLayout } from '@/providers';
 
+const API_URL = import.meta.env.VITE_APP_API_URL;
+
 const initialValues = {
   first_name: '',
   last_name: '',
@@ -62,7 +64,7 @@ const Signup = () => {
           university_id
         };
 
-        const response = await axios.post('http://127.0.0.1:8000/api/register', payload);
+        const response = await axios.post(`${API_URL}/register`, payload);
 
         if (response.data.message === 'User registered successfully') {
           navigate('/auth/login');

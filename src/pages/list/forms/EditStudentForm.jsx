@@ -16,13 +16,13 @@ const schema = z.object({
   .string()
   .length(10, "Phone number must be exactly 10 digits") // ✅ Must be exactly 10 digits
   .regex(/^\d+$/, "Phone number must contain only numbers"),
-  course_id: z.string().nonempty("Select a Program"),
+  program_id: z.string().nonempty("Select a Program"),
 });
 
 const API_URL = "http://127.0.0.1:8000/api/students";
 
 const EditStudentForm = ({ open, handleClose, student, onStudentUpdated }) => {
-  const [courses, setCourses] = useState([]);
+  const [programs, setprograms] = useState([]);
   const [initialValues, setInitialValues] = useState(null);
 
   const { register, handleSubmit, watch, reset, setValue, formState: { errors } } = useForm({
@@ -37,20 +37,20 @@ const EditStudentForm = ({ open, handleClose, student, onStudentUpdated }) => {
         last_name: student.last_name || "",
         email: student.email || "",
         telephone: student.telephone || "",
-        course_id: student.course_id ? String(student.course_id) : "", // ✅ Ensure it's a string
+        program_id: student.program_id ? String(student.program_id) : "", // ✅ Ensure it's a string
       };
 
       reset(formValues);
       setInitialValues(formValues);
-      setValue("course_id", formValues.course_id);
+      setValue("program_id", formValues.program_id);
     }
   }, [student, reset, setValue]);
 
-  // ✅ Fetch Courses
+  // ✅ Fetch programs
   useEffect(() => {
-    axios.get("http://127.0.0.1:8000/api/courses")
-      .then((response) => setCourses(response.data.data || []))
-      .catch(() => toast.error("Failed to fetch courses"));
+    axios.get("http://127.0.0.1:8000/api/programs")
+      .then((response) => setprograms(response.data.data || []))
+      .catch(() => toast.error("Failed to fetch programs"));
   }, []);
 
   // ✅ Check if any changes were made
@@ -151,13 +151,13 @@ const EditStudentForm = ({ open, handleClose, student, onStudentUpdated }) => {
             {errors.telephone && <p className="text-red-500 text-xs mt-1">{errors.telephone.message}</p>}
           </div>
 
-          {/* Course Dropdown */}
+          {/* program Dropdown */}
           <div>
             <label className="block text-sm font-medium text-gray-700">Program</label>
-            <select {...register("course_id")} className="input w-full border p-2 rounded-md focus:ring-2 focus:ring-blue-500">
-              {renderOptions(courses, "course_id", "Select a Program")}
+            <select {...register("program_id")} className="input w-full border p-2 rounded-md focus:ring-2 focus:ring-blue-500">
+              {renderOptions(programs, "program_id", "Select a Program")}
             </select>
-            {errors.course_id && <p className="text-red-500 text-xs mt-1">{errors.course_id.message}</p>}
+            {errors.program_id && <p className="text-red-500 text-xs mt-1">{errors.program_id.message}</p>}
           </div>
         </motion.form>
       </DialogContent>

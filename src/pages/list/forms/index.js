@@ -6,3 +6,4 @@ export { default as AddStudentsForm } from './AddStudentsForm';
 export { default as AddSupervisorForm } from './AddSupervisorForm';
 export { default as EditStudentForm } from './EditStudentForm';
 export { default as EditSupervisorForm } from './EditSupervisorForm';
+export { default as AddAlumniForm } from './AddAlumniForm';

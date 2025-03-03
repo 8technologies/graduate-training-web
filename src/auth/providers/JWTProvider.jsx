@@ -36,20 +36,22 @@ const AuthProvider = ({ children }) => {
 
   const login = async (email, password) => {
     try {
-      const { data } = await axios.post(LOGIN_URL, { email, password });
-      if (data?.token && data?.user) {
-        const transformedUser = transformUser(data.user);
-        saveAuth(data);
-        setCurrentUser(transformedUser);
-        return transformedUser;
-      } else {
-        throw new Error("Invalid response format");
-      }
+        const response = await axios.post(LOGIN_URL, { email, password });
+
+        if (!response.data || !response.data.token || !response.data.user) {
+            throw new Error("Invalid login credentials");
+        }
+
+        saveAuth(response.data);
+        setCurrentUser(response.data.user);
+
+        return response.data; // ✅ Fix return
     } catch (error) {
-      saveAuth(null);
-      throw new Error(error.response?.data?.message || "Login failed");
+        console.error("Login failed:", error.response?.data || error);
+        throw new Error(error.response?.data?.message || "Login failed");
     }
-  };
+};
+
 
   const getUser = async () => {
     try {

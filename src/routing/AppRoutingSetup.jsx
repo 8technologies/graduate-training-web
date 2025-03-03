@@ -13,7 +13,7 @@ import { AuthenticationWelcomeMessagePage, AuthenticationAccountDeactivatedPage,
 import SupervisorPageList from '@/pages/list/supervisors/SupervisorPageList';
 import { StudentPageList, StudentProfile } from '../pages/list/students';
 import { AlumniPageList } from '../pages/list/alumnis';
-import { ProgramPageList } from '../pages/programs';
+import { ProgramPageList } from '../pages/list/programs';
 import { ScheduledTrainingPageList } from '../pages/scheduledtrainings';
 import { EventsPageList } from '../pages/events';
 import AnnoucementsPageList from '@/pages/announcements/AnnoucementsPageList';
@@ -47,7 +47,7 @@ const AppRoutingSetup = () => {
           <Route path="/list/supervisors" element={<SupervisorPageList />} />
           <Route path="/list/students" element={<StudentPageList />} />
           <Route path="/list/alumnis" element={<AlumniPageList />} />
-          <Route path="/programs" element={<ProgramPageList />} />
+          <Route path="/list/programs" element={<ProgramPageList />} />
           <Route path="/trainings" element={<ScheduledTrainingPageList />} />
           <Route path="/events" element={<EventsPageList />} />
           <Route path="/announcements" element={<AnnoucementsPageList />} />

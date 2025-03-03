@@ -16,13 +16,13 @@ const schema = z.object({
   .string()
   .length(10, "Phone number must be exactly 10 digits"),// ✅ Must be exactly 10 digits
   university_id: z.string().nonempty("Select a university"),
-  course_id: z.string().nonempty("Select a Program"),
+  program_id: z.string().nonempty("Select a Program"),
   student_level_id: z.string().nonempty("Select a Student Level"),
 });
 
 const AddStudentsForm = ({ open, handleClose, onStudentAdded }) => {
   const [universities, setUniversities] = useState([]);
-  const [courses, setCourses] = useState([]);
+  const [programs, setprograms] = useState([]);
   const [studentLevels, setStudentLevels] = useState([]);
 
   const { register, handleSubmit, watch, reset, formState: { errors } } = useForm({
@@ -35,9 +35,9 @@ const AddStudentsForm = ({ open, handleClose, onStudentAdded }) => {
       .then((response) => setUniversities(response.data.data || []))
       .catch(() => toast.error("Failed to fetch universities"));
 
-    axios.get("http://127.0.0.1:8000/api/courses")
-      .then((response) => setCourses(response.data.data || []))
-      .catch(() => toast.error("Failed to fetch courses"));
+    axios.get("http://127.0.0.1:8000/api/programs")
+      .then((response) => setprograms(response.data.data || []))
+      .catch(() => toast.error("Failed to fetch programs"));
 
     axios.get("http://127.0.0.1:8000/api/studentlevels")
       .then((response) => setStudentLevels(response.data.data || []))
@@ -137,18 +137,18 @@ const AddStudentsForm = ({ open, handleClose, onStudentAdded }) => {
             {errors.university_id && <p className="text-red-500 text-xs mt-1">{errors.university_id.message}</p>}
           </div>
 
-          {/* Course */}
+          {/* program */}
           <div>
             <label className="block text-sm font-medium text-gray-700">📚 Program</label>
-            <select {...register("course_id")} className="input w-full border p-2 rounded-md focus:ring-2 focus:ring-blue-500">
+            <select {...register("program_id")} className="input w-full border p-2 rounded-md focus:ring-2 focus:ring-blue-500">
               <option value="">Select a Program</option>
-              {courses.map((course) => (
-                <option key={course.id} value={course.id}>
-                  {course.name}
+              {programs.map((program) => (
+                <option key={program.id} value={program.id}>
+                  {program.name}
                 </option>
               ))}
             </select>
-            {errors.course_id && <p className="text-red-500 text-xs mt-1">{errors.course_id.message}</p>}
+            {errors.program_id && <p className="text-red-500 text-xs mt-1">{errors.program_id.message}</p>}
           </div>
 
           {/* Student Level */}

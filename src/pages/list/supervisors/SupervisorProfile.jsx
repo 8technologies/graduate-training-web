@@ -6,6 +6,7 @@ import { toast } from "sonner";
 import { ProgressIndicatorChart } from "../../../components/charts";
 
 const API_URL = "http://127.0.0.1:8000/api/supervisors";
+//const API_URL = "https://gtts-api.comfarnet.org/api/supervisors";
 
 const SupervisorProfileModal = ({ open, handleClose, supervisorId }) => {
   const [supervisor, setSupervisor] = useState(null);
@@ -64,33 +65,23 @@ const SupervisorProfileModal = ({ open, handleClose, supervisorId }) => {
               </h2>
               <p className="text-gray-500">{supervisor.email}</p>
               <p className="text-gray-500">{supervisor.telephone}</p>
-              <span>Supervisor for</span> 
-              <p className="text-lg font-semibold text-blue-700 mt-2">
-               {supervisor.course_name || "No Program Assigned"}
-              </p>
             </motion.div>
 
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.4 }}
-              className="mt-6 grid grid-cols-3 gap-6"
+              className="mt-6 grid grid-cols-2 gap-6"
             >
               <div className="p-6 bg-white shadow-lg rounded-lg text-center transform transition duration-300 hover:scale-105">
                 <h4 className="text-sm font-medium text-gray-600">🏫 University</h4>
                 <p className="text-lg font-semibold text-gray-800">{supervisor.university_name || "N/A"}</p>
               </div>
               <div className="p-6 bg-white shadow-lg rounded-lg text-center transform transition duration-300 hover:scale-105">
-                <h4 className="text-sm font-medium text-gray-600">📚 Program Supervised</h4>
-                <p className="text-lg font-semibold text-gray-800">{supervisor.course_name || "N/A"}</p>
-              </div>
-              <div className="p-6 bg-white shadow-lg rounded-lg text-center transform transition duration-300 hover:scale-105">
                 <h4 className="text-sm font-medium text-gray-600">📊 Attendance</h4>
                 <p className="text-lg font-semibold text-green-600">90%</p>
               </div>
             </motion.div>
-
-           
 
             <div className="mt-6 bg-white p-6 rounded-lg shadow-lg">
               <h1 className="text-lg font-semibold">📈 Supervisor Performance Chart</h1>

@@ -36,7 +36,7 @@ export const MENU_SIDEBAR = [{
   {
     title: 'Programs',
     icon: 'book-open', // Represents educational programs or courses
-    path: '/programs',
+    path: '/list/programs',
   },
   
   {
