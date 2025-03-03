@@ -37,7 +37,7 @@ const AppRoutingSetup = () => {
             {/* Role-Based Dashboards */}
           <Route path="/admin/dashboard" element={<AdminDashboard />} />
           <Route path="/student/dashboard" element={<StudentDashboard />} />
-          <Route path="/supervisor/dashboard" element={<SupervisorDashboard />} />x
+          <Route path="/supervisor/dashboard" element={<SupervisorDashboard />} />
           <Route path="/alumni/dashboard" element={<AlumniDashboard />} />
           
          

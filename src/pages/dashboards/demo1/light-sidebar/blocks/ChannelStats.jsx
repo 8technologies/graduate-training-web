@@ -8,6 +8,7 @@ const API_URL = import.meta.env.VITE_APP_API_URL;
 const ChannelStats = () => {
   const [studentCount, setStudentCount] = useState(0);
   const [supervisorCount, setSupervisorCount] = useState(0);
+  const [programCount, setProgramCount] = useState(0);
 
   // Fetch the student count from the API when the component mounts.
   useEffect(() => {
@@ -33,12 +34,23 @@ const ChannelStats = () => {
       });
   }, []);
 
+  useEffect(() => {
+    axios.get(`${API_URL}/programs`)
+      .then((response) => {
+        const programs = response.data.data || [];
+        setProgramCount(programs.length);
+      })
+      .catch((error) => {
+        console.error("Error fetching Programs:", error);
+      });
+  }, []);
+
   const items = [
     {
       logo: "/metronic/tailwind/react/media/images/programs.png",
-      info: "5",
+      info: programCount.toString(),
       desc: "Programs",
-      path: "/programs", // ✅ Link to Programs List
+      path: "/list/programs", // ✅ Link to Programs List
     },
     {
       logo: "/metronic/tailwind/react/media/images/superviso1.png",
