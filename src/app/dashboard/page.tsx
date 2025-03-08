@@ -3,9 +3,9 @@
 
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import type { RootState, AppDispatch } from "@/store/store";
+import type { RootState, AppDispatch } from "../../store/store";
 import { useRouter } from "next/navigation";
-import { logout } from "@/store/reducers/authReducer";
+import { logout } from "../../store/reducers/authReducer";
 
 const DashboardPage: React.FC = () => {
     const dispatch = useDispatch<AppDispatch>();

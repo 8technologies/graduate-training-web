@@ -5,8 +5,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/navigation";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
-import type { AppDispatch, RootState } from "@/store/store";
-import { loginAsync } from "@/store/actions/authActions";
+import type { AppDispatch, RootState } from "../../store/store";
+import { loginAsync } from "../../store/actions/authActions";
 
 interface LoginFormInputs {
     email: string;
